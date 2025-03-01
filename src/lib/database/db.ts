@@ -23,7 +23,7 @@ export const connectToDatabase = async () => {
     cached.promise = 
         cached.promise || 
         mongoose.connect(MONGODB_URL, {
-            dbName: 'pixify-database', bufferCommands: false
+            dbName: 'code-kin-database', bufferCommands: false
         })
 
     cached.conn = await cached.promise;
