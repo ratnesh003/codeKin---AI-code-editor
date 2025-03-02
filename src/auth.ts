@@ -4,6 +4,8 @@ import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { getUser } from "./lib/database/actions/user.action"
 import bcrypt from "bcryptjs"
+import { loginFormSchema } from "./types/zod"
+// import { loginFormSchema } from "@/types"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
@@ -11,19 +13,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             id: "credentials",
             name: "Credentials",
             credentials: {
-                email: { label: "Email", type: "text" },
+                email: { label: "Email", type: "email" },
                 password: { label: "Password", type: "password" },
             },
-            authorize: async (credentials: any) => {
+            authorize: async (credentials) => {
                 let user = null
 
-                user = await getUser({email: credentials.email})
+                const { email, password } = await loginFormSchema.parseAsync(credentials)
+
+                user = await getUser({email: email})
 
                 if (!user) {
                     throw new Error("Invalid credentials. 1")
                 }
 
-                const passCheck = await bcrypt.compare(credentials.password, user.password)
+                const passCheck = await bcrypt.compare(password, user.password)
 
                 if (!passCheck) {
                     throw new Error("Invalid credentials. 2")

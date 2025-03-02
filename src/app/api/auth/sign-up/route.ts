@@ -4,7 +4,7 @@ import User from "@/lib/database/models/user.model";
 import { handleError, saltAndHashPassword } from "@/lib/utils";
 import { NextResponse, NextRequest } from "next/server";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
 
     await connectToDatabase()
 
@@ -42,7 +42,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
     try {
         const { email, password } = user
         const loginUser = await signIn("credentials", {
-            redirect: false,
+            redirect: true,
+            redirectTo: "/profile",
             email,
             password
         })

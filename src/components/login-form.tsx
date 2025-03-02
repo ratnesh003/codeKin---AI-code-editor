@@ -27,32 +27,21 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
-
-const formSchema = z.object({
-  email: z
-    .string({
-      required_error: "Email is required",
-    })
-    .email({ message: "Invalid email address" })
-    .min(5, { message: "Must be 5 or more characters long" }),
-  password: z
-    .string()
-    .min(8, { message: "Please enter the password atleast 8 char" }),
-});
+import { loginFormSchema } from "@/types/zod";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof loginFormSchema>>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     const {email, password} = values;
 
     const user = await signIn("credentials", {
@@ -92,7 +81,7 @@ export function LoginForm({
                       <FormItem>
                         <FormLabel htmlFor="email">Email</FormLabel>
                         <FormControl>
-                          <Input placeholder="m@example.com" {...field} />
+                          <Input placeholder="m@example.com" {...field} name="email" type="email" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -109,7 +98,7 @@ export function LoginForm({
                           <FormLabel htmlFor="password">Password</FormLabel>
                         </div>
                         <FormControl>
-                          <Input type="password" {...field} />
+                          <Input type="password" {...field} name="password" />
                         </FormControl>
                       </div>
                       <FormMessage />

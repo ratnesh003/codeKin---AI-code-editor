@@ -13,13 +13,13 @@ export const createUser = async (user: newUserParams) => {
 
         return newUser
 
-    } catch (error) {
+    } catch (error: any) {
         handleError(error)
     }
 }
 
 export const getUser = async ({email}: {
-    email: String,
+    email: string,
 }) => {
 
     try {
@@ -31,6 +31,6 @@ export const getUser = async ({email}: {
         return user;
 
     } catch (error) {
-        throw new Error("Error: in this")
+        handleError(error)
     }
 }

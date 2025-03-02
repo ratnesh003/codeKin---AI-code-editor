@@ -62,7 +62,7 @@ const formSchema = z.object({
         .min(8, { message: "Please enter the password atleast 8 character" }),
     })
     .refine(
-      (data: { password: String; confirm: String }) =>
+      (data: { password: string; confirm: string }) =>
         data.password === data.confirm,
       {
         message: "Passwords don't match",
